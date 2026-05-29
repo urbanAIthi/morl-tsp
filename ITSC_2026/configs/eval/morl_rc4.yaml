@@ -1,0 +1,152 @@
+group: itsc2026_morl_rc4_eval
+callbacks: [wandb]
+experiment_type: intersection_zoo
+workers: 16
+n_parallel: 1
+
+slurm:
+  gpus: 1
+  cpus: 16
+  mem: 30G
+
+eval:
+  baselines: [fixed_ts, tsp]
+  rows_root: ITSC_2026/results/evaluations/morl_rc4_dataset
+  route_seeds: [3423, 3424, 3425, 3426, 3427, 3428, 3429, 3430, 3431, 3432]
+  timing_seeds: [3423, 3424, 3425, 3426, 3427, 3428, 3429, 3430, 3431, 3432]
+  rows_mode: seed
+  rows_append: true
+  rows_formatter: ITSC_2026.src.row_formatters:paper_eval_rows
+
+config_overwrite:
+- name: atl66_morl_rc4
+  iz_net_rel_paths: [atlanta/66/net.net.xml]
+  model_path: ITSC_2026/models/morl/atl66_step500000.tar
+
+- name: bos666_morl_rc4
+  iz_net_rel_paths: [boston/666/net.net.xml]
+  model_path: ITSC_2026/models/morl/bos666_step500000.tar
+
+- name: chi1027_morl_rc4
+  iz_net_rel_paths: [chicago/1027/net.net.xml]
+  model_path: ITSC_2026/models/morl/chi1027_step500000.tar
+
+- name: chi2412_morl_rc4
+  iz_net_rel_paths: [chicago/2412/net.net.xml]
+  model_path: ITSC_2026/models/morl/chi2412_step500000.tar
+
+- name: chi758_morl_rc4
+  iz_net_rel_paths: [chicago/758/net.net.xml]
+  model_path: ITSC_2026/models/morl/chi758_step500000.tar
+
+- name: dal1082_morl_rc4
+  iz_net_rel_paths: [dallas/1082/net.net.xml]
+  model_path: ITSC_2026/models/morl/dal1082_step500000.tar
+
+- name: la2114_morl_rc4
+  iz_net_rel_paths: [los-angeles/2114/net.net.xml]
+  model_path: ITSC_2026/models/morl/la2114_step500000.tar
+
+- name: la477_morl_rc4
+  iz_net_rel_paths: [los-angeles/477/net.net.xml]
+  model_path: ITSC_2026/models/morl/la477_step500000.tar
+
+- name: nyc1078_morl_rc4
+  iz_net_rel_paths: [new-york-city/1078/net.net.xml]
+  model_path: ITSC_2026/models/morl/nyc1078_step500000.tar
+
+- name: nyc10802_morl_rc4
+  iz_net_rel_paths: [new-york-city/10802/net.net.xml]
+  model_path: ITSC_2026/models/morl/nyc10802_step500000.tar
+
+- name: sea543_morl_rc4
+  iz_net_rel_paths: [seattle/543/net.net.xml]
+  model_path: ITSC_2026/models/morl/sea543_step500000.tar
+
+- name: sf838_morl_rc4
+  iz_net_rel_paths: [san-francisco/838/net.net.xml]
+  model_path: ITSC_2026/models/morl/sf838_step500000.tar
+
+- name: slc47_morl_rc4
+  iz_net_rel_paths: [salt-lake-city/47/net.net.xml]
+  model_path: ITSC_2026/models/morl/slc47_step500000.tar
+
+hyperparameters: {}
+
+base_config:
+  random_seed: 3422
+  agent_id: TL
+  delta_time: 4
+  min_green: 20
+  step_length: 1
+  wandb: false
+  deterministic: true
+  n_vec_envs: 1
+  scenario_sampling: random
+  observation: ObservationFunctionPT
+  obs_every_delta_time: true
+  add_reward_weights_to_obs: false
+  add_mean_delay: true
+  add_cvar_delay: true
+  add_phase_last_seen: true
+  add_distance: true
+  add_delay: false
+  add_occupancy: false
+  reward_weights:
+    delay_bus: 1.0
+    delay: 1.0
+  reward_kwargs:
+    delay:
+      nonbus_cvar_alpha: 0.1
+      nonbus_cvar_threshold: 120.0
+      nonbus_cvar_penalty: 0.25
+      infeasible_action_penalty: 120.0
+  reward_clip: [-600, 100]
+  phase_controller: BasicPhaseController
+  num_seconds: 10800
+  run_up_time: 3600
+  time_to_teleport: 300
+  iz_scenario_duration_seconds: 10800
+  iz_seed: 3423
+  iz_bus_gen_seed: 3423
+  iz_n_scenarios: 1
+  iz_random_start_time: true
+  eval_start_time: 0
+  electric_penetration_rate: 0
+  bus_vid_prefix: _42.
+  eval_episodes: 1
+  eval_log_on_step: false
+  save_eval_trajectories: false
+  morl_eval_log_mode: compact
+  morl_eval_log_seed_runs: false
+  morl_eval_prefer_best_hv_checkpoint: false
+  morl_algorithm: morl_baselines.multi_policy.envelope.envelope:Envelope
+  morl_algorithm_kwargs:
+    seed: 3422
+    log: false
+  morl_load_kwargs:
+    load_replay_buffer: false
+  eval_bus_flows:
+  - name: rc4_changing
+    sim_config_overrides:
+      iz_bus_timetable_config:
+        route_count: 4
+        headway_min_seconds: 300.0
+        headway_max_seconds: 900.0
+        deviation_min_seconds: -120.0
+        deviation_max_seconds: 600.0
+        route_duration_min_seconds: 10800
+        route_duration_max_seconds: 36000
+  morl_eval_sources: [model]
+  morl_eval_weights:
+  - [1.0, 0.0]
+  - [0.9, 0.1]
+  - [0.8, 0.2]
+  - [0.7, 0.3]
+  - [0.6, 0.4]
+  - [0.5, 0.5]
+  - [0.4, 0.6]
+  - [0.3, 0.7]
+  - [0.2, 0.8]
+  - [0.1, 0.9]
+  - [0.0, 1.0]

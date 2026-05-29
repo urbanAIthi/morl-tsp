@@ -1,0 +1,36 @@
+% heatmap cell: soft red/blue gradient scaled by |rho|
+
+\sisetup{round-mode=places,round-precision=2}
+\newcommand{\heat}[1]{%
+  \pgfmathsetmacro{\absrho}{abs(#1)}%
+\pgfmathsetmacro{\pct}{ifthenelse(\absrho<0.45,0,min(100,30*\absrho))}% white below 0.45
+  \ifdim #1 pt > 0pt
+    \edef\heatcolor{blue!\pct!white}%
+  \else
+    \edef\heatcolor{red!\pct!white}%
+  \fi
+  \expandafter\cellcolor\expandafter{\heatcolor}\num{#1}%
+}
+
+\begin{table}
+\centering
+\scriptsize
+\setlength{\tabcolsep}{2.5pt}
+\renewcommand{\arraystretch}{1.15}
+\caption{Spearman rank correlations ($\rho$) between MORL performance summaries and static intersection features across 13 intersections. Cell color encodes sign and magnitude (blue=positive, red=negative). Significance testing is omitted/handled separately due to multiple comparisons and small $n$.}
+\label{tab:spearman}
+\begin{tabular}{lrrrr}
+\toprule
+Feature & HV\% & \# ND & FT Dom & TSP Dom \\
+\midrule
+Total Flow & \heat{-0.46} & \heat{-0.03} & \heat{0.03} & \heat{0.11} \\
+Traffic Imb. & \heat{-0.33} & \heat{-0.41} & \heat{-0.42} & \heat{-0.25} \\
+\#App. & \heat{-0.37} & \heat{-0.21} & \heat{-0.60} & \heat{-0.54} \\
+\#Phases & \heat{-0.62} & \heat{-0.51} & \heat{-0.89} & \heat{-0.64} \\
+\#Lanes & \heat{-0.28} & \heat{-0.07} & \heat{-0.52} & \heat{-0.37} \\
+Cycle (s) & \heat{-0.60} & \heat{-0.54} & \heat{-0.74} & \heat{-0.51} \\
+Green Imb. & \heat{-0.35} & \heat{-0.40} & \heat{-0.42} & \heat{-0.24} \\
+Max Phase Share & \heat{0.26} & \heat{-0.02} & \heat{0.51} & \heat{0.46} \\
+\bottomrule
+\end{tabular}
+\end{table}

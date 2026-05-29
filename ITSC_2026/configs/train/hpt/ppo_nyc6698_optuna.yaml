@@ -1,0 +1,131 @@
+group: hpt_ppo_nyc6698_optuna
+stable_baselines_model: MaskablePPO
+callbacks: [wandb]
+experiment_type: intersection_zoo
+workers: 16
+n_parallel: 1
+
+slurm:
+  gpus: 2
+  cpus: 16
+  mem: 80G
+
+database:
+  study_name: hpt_ppo_nyc6698_optuna_v1
+  load_if_exists: false
+
+hyperparameter_object:
+  env_seeds: [3423]
+  callbacks: [wandb, optuna_prune]
+  experiment_runner: sb3
+  objective_metric: reward
+  direction: maximize
+  group: hpt_ppo_nyc6698_optuna
+  n_trials: 32
+  startup_trials: 8
+  warmup_steps: 5000
+  agent_seed: 3422
+  hyperparameter_ranges:
+    n_steps:
+      choices: [256, 512, 1024, 2048]
+    batch_size:
+      choices: [64, 128, 256]
+    learning_rate:
+      low: 5.0e-05
+      high: 5.0e-04
+      log: true
+    gamma:
+      low: 0.985
+      high: 0.999
+      log: false
+    gae_lambda:
+      low: 0.95
+      high: 1.0
+      log: false
+    ent_coef:
+      low: 1.0e-05
+      high: 2.0e-02
+      log: true
+    vf_coef:
+      low: 0.1
+      high: 0.5
+      log: false
+    n_epochs:
+      choices: [5, 10, 15]
+    clip_range:
+      low: 0.2
+      high: 0.4
+      log: false
+    max_grad_norm:
+      low: 0.2
+      high: 0.6
+      log: false
+    target_kl:
+      choices: [0.01, 0.02, 0.03]
+    clip_range_vf:
+      choices: [null]
+    policy:
+      choices: [MlpPolicy]
+    policy_kwargs_net_arch:
+      choices:
+        - pi_128x128_vf_128x128
+        - pi_256x256_vf_256x256
+        - pi_512x256_vf_512x256
+
+config_overwrite: {}
+
+hyperparameters: {}
+
+base_config:
+  agent_id: TL
+  random_seed: 3422
+  delta_time: 4
+  min_green: 20
+  max_green: 0
+  step_length: 1
+  wandb: true
+  deterministic: false
+  n_vec_envs: 4
+  vec_env_type: subproc
+  scenario_sampling: random
+  observation: ObservationFunctionPT
+  obs_every_delta_time: true
+  add_reward_weights_to_obs: false
+  add_mean_delay: true
+  add_cvar_delay: true
+  add_phase_last_seen: true
+  add_distance: true
+  add_delay: false
+  add_occupancy: false
+  reward_weights:
+    mean_delay_bus: 0.5
+    mean_delay: 0.5
+  reward_scales:
+    mean_delay_bus: [-200.0, 0.0]
+    mean_delay: [-150.0, 0.0]
+  reward_clip: [-600, 100]
+  phase_controller: BasicPhaseController
+  num_seconds: 10800
+  run_up_time: 3600
+  time_to_teleport: 300
+  total_timesteps: 300000
+  rl_checkpoint_freq_steps: 50000
+  rl_checkpoint_upload_to_wandb: true
+  rl_wandb_log_every_n_steps: 25
+  rl_save_trajectories: false
+  iz_scenario_duration_seconds: 100000
+  iz_seed: 3423
+  iz_bus_gen_seed: 3423
+  iz_n_scenarios: 1
+  iz_net_rel_paths: [new-york-city/6698/net.net.xml]
+  iz_random_start_time: true
+  electric_penetration_rate: 0
+  bus_vid_prefix: _42.
+  iz_bus_timetable_config:
+    route_count: 4
+    headway_min_seconds: 300.0
+    headway_max_seconds: 900.0
+    deviation_min_seconds: -120.0
+    deviation_max_seconds: 600.0
+    route_duration_min_seconds: 10800
+    route_duration_max_seconds: 36000

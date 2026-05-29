@@ -1,0 +1,193 @@
+group: itsc2026_ppo_rc4_generic_eval
+stable_baselines_model: MaskablePPO
+callbacks: []
+experiment_type: intersection_zoo
+workers: 16
+n_parallel: 1
+
+slurm:
+  gpus: 1
+  cpus: 16
+  mem: 80G
+
+eval:
+  baselines: [fixed_ts, tsp]
+  rows_root: ITSC_2026/results/evaluations/ppo_rc4_dataset
+  route_seeds: [3423, 3424, 3425, 3426, 3427, 3428, 3429, 3430, 3431, 3432]
+  timing_seeds: [3423, 3424, 3425, 3426, 3427, 3428, 3429, 3430, 3431, 3432]
+  rows_mode: seed
+  rows_append: true
+  rows_formatter: ITSC_2026.src.row_formatters:paper_eval_rows
+  reward_weight_keys: [mean_delay_bus, mean_delay]
+
+config_overwrite:
+- name: chi2412_ppo_rc4
+  iz_net_rel_paths: [chicago/2412/net.net.xml]
+  models:
+  - name: rc4_changing_wb1p0
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb1p0.zip
+    setpoint_weights: [1.0, 0.0]
+  - name: rc4_changing_wb0p9
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p9.zip
+    setpoint_weights: [0.9, 0.1]
+  - name: rc4_changing_wb0p8
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p8.zip
+    setpoint_weights: [0.8, 0.2]
+  - name: rc4_changing_wb0p7
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p7.zip
+    setpoint_weights: [0.7, 0.3]
+  - name: rc4_changing_wb0p6
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p6.zip
+    setpoint_weights: [0.6, 0.4]
+  - name: rc4_changing_wb0p5
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p5.zip
+    setpoint_weights: [0.5, 0.5]
+  - name: rc4_changing_wb0p4
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p4.zip
+    setpoint_weights: [0.4, 0.6]
+  - name: rc4_changing_wb0p3
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p3.zip
+    setpoint_weights: [0.3, 0.7]
+  - name: rc4_changing_wb0p2
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p2.zip
+    setpoint_weights: [0.2, 0.8]
+  - name: rc4_changing_wb0p1
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p1.zip
+    setpoint_weights: [0.1, 0.9]
+  - name: rc4_changing_wb0p0
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_chi2412_wb_sweep_wb0p0.zip
+    setpoint_weights: [0.0, 1.0]
+
+- name: la2114_ppo_rc4
+  iz_net_rel_paths: [los-angeles/2114/net.net.xml]
+  models:
+  - name: rc4_changing_wb1p0
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb1p0.zip
+    setpoint_weights: [1.0, 0.0]
+  - name: rc4_changing_wb0p9
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p9.zip
+    setpoint_weights: [0.9, 0.1]
+  - name: rc4_changing_wb0p8
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p8.zip
+    setpoint_weights: [0.8, 0.2]
+  - name: rc4_changing_wb0p7
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p7.zip
+    setpoint_weights: [0.7, 0.3]
+  - name: rc4_changing_wb0p6
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p6.zip
+    setpoint_weights: [0.6, 0.4]
+  - name: rc4_changing_wb0p5
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p5.zip
+    setpoint_weights: [0.5, 0.5]
+  - name: rc4_changing_wb0p4
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p4.zip
+    setpoint_weights: [0.4, 0.6]
+  - name: rc4_changing_wb0p3
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p3.zip
+    setpoint_weights: [0.3, 0.7]
+  - name: rc4_changing_wb0p2
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p2.zip
+    setpoint_weights: [0.2, 0.8]
+  - name: rc4_changing_wb0p1
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p1.zip
+    setpoint_weights: [0.1, 0.9]
+  - name: rc4_changing_wb0p0
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_la2114_wb_sweep_wb0p0.zip
+    setpoint_weights: [0.0, 1.0]
+
+- name: nyc10802_ppo_rc4
+  iz_net_rel_paths: [new-york-city/10802/net.net.xml]
+  models:
+  - name: rc4_changing_wb1p0
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb1p0.zip
+    setpoint_weights: [1.0, 0.0]
+  - name: rc4_changing_wb0p9
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p9.zip
+    setpoint_weights: [0.9, 0.1]
+  - name: rc4_changing_wb0p8
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p8.zip
+    setpoint_weights: [0.8, 0.2]
+  - name: rc4_changing_wb0p7
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p7.zip
+    setpoint_weights: [0.7, 0.3]
+  - name: rc4_changing_wb0p6
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p6.zip
+    setpoint_weights: [0.6, 0.4]
+  - name: rc4_changing_wb0p5
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p5.zip
+    setpoint_weights: [0.5, 0.5]
+  - name: rc4_changing_wb0p4
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p4.zip
+    setpoint_weights: [0.4, 0.6]
+  - name: rc4_changing_wb0p3
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p3.zip
+    setpoint_weights: [0.3, 0.7]
+  - name: rc4_changing_wb0p2
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p2.zip
+    setpoint_weights: [0.2, 0.8]
+  - name: rc4_changing_wb0p1
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p1.zip
+    setpoint_weights: [0.1, 0.9]
+  - name: rc4_changing_wb0p0
+    model_path: ITSC_2026/models/ppo/ITSC2026_ppo_nyc10802_wb_sweep_wb0p0.zip
+    setpoint_weights: [0.0, 1.0]
+
+hyperparameters: {}
+
+base_config:
+  random_seed: 3422
+  agent_id: TL
+  delta_time: 4
+  min_green: 20
+  step_length: 1
+  wandb: false
+  deterministic: true
+  n_vec_envs: 1
+  scenario_sampling: random
+  observation: ObservationFunctionPT
+  obs_every_delta_time: true
+  add_reward_weights_to_obs: false
+  add_mean_delay: true
+  add_cvar_delay: true
+  add_phase_last_seen: true
+  add_distance: true
+  add_delay: false
+  add_occupancy: false
+  reward_weights:
+    delay_bus: 1.0
+    delay: 1.0
+  reward_kwargs:
+    delay:
+      nonbus_cvar_alpha: 0.1
+      nonbus_cvar_threshold: 120.0
+      nonbus_cvar_penalty: 0.25
+      infeasible_action_penalty: 120.0
+  reward_clip: [-600, 100]
+  eval_bus_flows:
+  - name: rc4_changing
+    sim_config_overrides:
+      iz_bus_timetable_config:
+        route_count: 4
+        headway_min_seconds: 300.0
+        headway_max_seconds: 900.0
+        deviation_min_seconds: -120.0
+        deviation_max_seconds: 600.0
+        route_duration_min_seconds: 10800
+        route_duration_max_seconds: 36000
+  phase_controller: BasicPhaseController
+  num_seconds: 10800
+  run_up_time: 3600
+  time_to_teleport: 300
+  iz_scenario_duration_seconds: 10800
+  iz_seed: 3423
+  iz_bus_gen_seed: 3423
+  iz_n_scenarios: 1
+  iz_random_start_time: true
+  eval_start_time: 0
+  electric_penetration_rate: 0
+  bus_vid_prefix: _42.
+  eval_episodes: 1
+  eval_log_on_step: false
+  save_eval_trajectories: false
+  morl_eval_log_mode: compact
+  morl_eval_log_seed_runs: false

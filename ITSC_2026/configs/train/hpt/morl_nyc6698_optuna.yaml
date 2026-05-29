@@ -1,0 +1,157 @@
+group: hpt_morl_nyc6698_optuna
+callbacks:  [wandb]
+experiment_type: intersection_zoo
+workers: 16
+n_parallel: 1
+
+slurm:
+  gpus: 2
+  cpus: 16
+  mem: 80G
+
+database:
+  study_name: hpt_morl_nyc6698_optuna_v1
+  load_if_exists: false
+
+hyperparameter_object:
+  env_seeds: [5511]
+  callbacks:  [wandb]
+  experiment_runner: morl
+  objective_metric: pareto_hv_nondom
+  direction: maximize
+  group: hpt_morl_nyc6698_optuna
+  n_trials: 32
+  startup_trials: 8
+  warmup_steps: 5000
+  agent_seed: 5511
+  hyperparameter_ranges:
+    learning_rate:
+      low: 5.0e-05
+      high: 0.00025
+      log: true
+    batch_size:
+      choices: [64, 128, 256]
+    gamma:
+      low: 0.96
+      high: 0.99
+      log: false
+    tau:
+      low: 0.02
+      high: 0.1
+      log: false
+    target_net_update_freq:
+      choices: [250, 500, 1000]
+    gradient_updates:
+      choices: [1, 2, 3, 4]
+    num_sample_w:
+      choices: [8, 16, 32]
+    initial_epsilon:
+      low: 0.05
+      high: 0.15
+      log: false
+    final_epsilon:
+      low: 0.005
+      high: 0.03
+      log: false
+    epsilon_decay_steps:
+      choices: [100000, 150000, 200000]
+    max_grad_norm:
+      low: 0.5
+      high: 1.5
+      log: false
+    initial_homotopy_lambda:
+      choices: [0.0, 0.1]
+    final_homotopy_lambda:
+      choices: [0.3, 0.5, 0.7]
+    homotopy_decay_steps:
+      choices: [150000, 200000]
+
+config_overwrite: {}
+
+hyperparameters: {}
+
+base_config:
+  agent_id: TL
+  random_seed: 5511
+  delta_time: 4
+  min_green: 20
+  step_length: 1
+  wandb: true
+  morl_enable_algorithm_logging: true
+  morl_auto_eval_env: false
+  morl_log_weighted_front: false
+  morl_periodic_eval: false
+  morl_checkpoint_freq_steps: 25000
+  morl_checkpoint_upload_to_wandb: false
+  morl_checkpoint_select_best_by_hv: true
+  morl_checkpoint_hv_metric: pareto_hv_nondom
+  morl_checkpoint_hv_episode_window: 64
+  morl_checkpoint_hv_ref_point: [0.0, 0.0]
+  morl_checkpoint_hv_nondominated_bonus: 0.01
+  morl_weight_sampling_bus_schedule:
+  - until_step: 150000
+    min_bus_weight: 0.1
+    max_bus_weight: 0.9
+  - until_step: null
+    min_bus_weight: 0.0
+    max_bus_weight: 1.0
+  deterministic: false
+  n_vec_envs: 1
+  scenario_sampling: sequential
+  observation: ObservationFunctionPT
+  obs_every_delta_time: true
+  add_reward_weights_to_obs: false
+  add_mean_delay: true
+  add_cvar_delay: true
+  add_phase_last_seen: true
+  add_distance: true
+  add_delay: false
+  add_occupancy: false
+  reward_weights:
+    delay_bus: 1.0
+    delay: 1.0
+  reward_kwargs:
+    delay:
+      nonbus_cvar_alpha: 0.1
+      nonbus_cvar_threshold: 120.0
+      nonbus_cvar_penalty: 0.25
+      infeasible_action_penalty: 120.0
+  reward_clip: [-600, 100]
+  morl_ref_point: [0.0, 0.0]
+  reward_scales: {}
+  phase_controller: BasicPhaseController
+  num_seconds: 10800
+  run_up_time: 3600
+  time_to_teleport: 300
+  total_timesteps: 200000
+  iz_seed: 5511
+  iz_bus_gen_seed: 5511
+  iz_n_scenarios: 1
+  iz_net_rel_paths:
+  - new-york-city/6698/net.net.xml
+  iz_random_start_time: true
+  electric_penetration_rate: 0
+  bus_vid_prefix: _42.
+  iz_bus_timetable_config:
+    route_count: 4
+    headway_min_seconds: 300.0
+    headway_max_seconds: 900.0
+    deviation_min_seconds: -120.0
+    deviation_max_seconds: 600.0
+    route_duration_min_seconds: 10800
+    route_duration_max_seconds: 36000
+  morl_algorithm: morl_baselines.multi_policy.envelope.envelope:Envelope
+  morl_algorithm_kwargs:
+    learning_starts: 4000
+    buffer_size: 250000
+    per: false
+    envelope: false
+    seed: 5511
+    device: auto
+    log: true
+    project_name: morl_tsp
+    experiment_name: hpt_morl_nyc6698_optuna
+  morl_train_method: train
+  morl_train_kwargs:
+    total_timesteps: 200000
+    eval_env: null

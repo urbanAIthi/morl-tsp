@@ -1,0 +1,3 @@
+[submodule "third_party/IntersectionZoo"]
+	path = third_party/IntersectionZoo
+	url = https://github.com/mit-wu-lab/IntersectionZoo.git

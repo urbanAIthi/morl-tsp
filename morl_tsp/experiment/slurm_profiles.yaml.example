@@ -1,0 +1,77 @@
+schema_version: 1
+description: Example local and Slurm execution profiles for MORL-TSP experiments.
+
+bases:
+  local:
+    backend: local
+    cwd: .
+    python: uv run python
+    env:
+      WANDB_MODE: offline
+      WANDB_BASE_URL: https://api.wandb.ai
+      SUMO_HOME: /path/to/your/venv/lib/python3.12/site-packages/sumo
+      INTERSECTION_ZOO_ROOT_PATH: /path/to/intersection_zoo/
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+
+  slurm:
+    backend: slurm
+    cwd: .
+    python: uv run python
+    ssh_target: user@cluster.example.edu
+    remote_repo: /remote/path/to/morl_tsp
+    partition: cpu
+    cpus_per_task: 4
+    mem: 16G
+    time: "04:00:00"
+    out_dir: /remote/path/to/slurm-output
+    sync_before_submit: true
+    sync_paths:
+      - scripts
+      - morl_tsp
+      - ITSC_2026/configs
+      - ITSC_2026/src
+    sync_excludes:
+      - .git
+      - .venv
+      - __pycache__
+      - "*.pyc"
+      - .env
+      - wandb
+      - logs
+      - artifacts
+    env:
+      PATH: /remote/path/to/bin:/usr/local/bin:/usr/bin:/bin
+      WANDB_MODE: offline
+      WANDB_BASE_URL: https://api.wandb.ai
+      SUMO_HOME: /remote/path/to/venv/lib/python3.12/site-packages/sumo
+      INTERSECTION_ZOO_ROOT_PATH: /remote/path/to/intersection_zoo/
+      OMP_NUM_THREADS: "1"
+      MKL_NUM_THREADS: "1"
+    command_template:
+      - ssh
+      - "{ssh_target}"
+      - "cd {remote_repo} && mkdir -p {out_dir} && sbatch --parsable --job-name={job_name} --partition={partition} --cpus-per-task={cpus_per_task} --mem={mem} --time={time} --output={out_dir}/%x_%j.out --error={out_dir}/%x_%j.err --wrap={wrapped_command}"
+
+profiles:
+  local:
+    base: local
+
+  cluster_cpu:
+    base: slurm
+    partition: cpu
+    cpus_per_task: 4
+    mem: 16G
+    time: "04:00:00"
+
+  cluster_gpu1:
+    base: slurm
+    partition: gpu
+    cpus_per_task: 16
+    gres: gpu:1
+    mem: 80G
+    time: "7-00:00:00"
+    command_template:
+      - ssh
+      - "{ssh_target}"
+      - "cd {remote_repo} && mkdir -p {out_dir} && sbatch --parsable --job-name={job_name} --partition={partition} --cpus-per-task={cpus_per_task} --mem={mem} --gres={gres} --time={time} --output={out_dir}/%x_%j.out --error={out_dir}/%x_%j.err --wrap={wrapped_command}"

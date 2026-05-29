@@ -1,0 +1,129 @@
+group: ITSC2026_ppo_chi2412_wb_sweep
+stable_baselines_model: MaskablePPO
+callbacks: [wandb]
+experiment_type: intersection_zoo
+workers: 4
+n_parallel: 1
+
+slurm:
+  gpus: 1
+  cpus: 16
+  mem: 40G
+
+config_overwrite:
+- name: wb1p0
+  reward_weights:
+    mean_delay_bus: 1.0
+    mean_delay: 0.0
+- name: wb0p9
+  reward_weights:
+    mean_delay_bus: 0.9
+    mean_delay: 0.1
+- name: wb0p8
+  reward_weights:
+    mean_delay_bus: 0.8
+    mean_delay: 0.2
+- name: wb0p7
+  reward_weights:
+    mean_delay_bus: 0.7
+    mean_delay: 0.3
+- name: wb0p6
+  reward_weights:
+    mean_delay_bus: 0.6
+    mean_delay: 0.4
+- name: wb0p5
+  reward_weights:
+    mean_delay_bus: 0.5
+    mean_delay: 0.5
+- name: wb0p4
+  reward_weights:
+    mean_delay_bus: 0.4
+    mean_delay: 0.6
+- name: wb0p3
+  reward_weights:
+    mean_delay_bus: 0.3
+    mean_delay: 0.7
+- name: wb0p2
+  reward_weights:
+    mean_delay_bus: 0.2
+    mean_delay: 0.8
+- name: wb0p1
+  reward_weights:
+    mean_delay_bus: 0.1
+    mean_delay: 0.9
+- name: wb0p0
+  reward_weights:
+    mean_delay_bus: 0.0
+    mean_delay: 1.0
+
+hyperparameters:
+  batch_size: 128
+  clip_range: 0.35
+  clip_range_vf: null
+  ent_coef: 0.001
+  gae_lambda: 0.99
+  gamma: 0.99
+  learning_rate: 0.0003
+  policy: MlpPolicy
+  stats_window_size: 25
+  vf_coef: 0.25
+  target_kl: 0.02
+  n_steps: 1024
+  max_grad_norm: 0.4
+  n_epochs: 10
+  policy_kwargs:
+    net_arch: [256, 256]
+
+base_config:
+  agent_id: TL
+  random_seed: 3422
+  delta_time: 4
+  min_green: 20
+  max_green: 0
+  step_length: 1
+  deterministic: false
+  n_vec_envs: 4
+  vec_env_type: subproc
+  scenario_sampling: random
+  observation: ObservationFunctionPT
+  obs_every_delta_time: true
+  add_reward_weights_to_obs: false
+  add_mean_delay: true
+  add_cvar_delay: true
+  add_phase_last_seen: true
+  add_distance: true
+  add_delay: false
+  add_occupancy: false
+  reward_weights:
+    mean_delay_bus: 0.5
+    mean_delay: 0.5
+  reward_scales:
+    mean_delay_bus: [-200.0, 0.0]
+    mean_delay: [-150.0, 0.0]
+  reward_clip: [-600, 100]
+  phase_controller: BasicPhaseController
+  num_seconds: 10800
+  run_up_time: 3600
+  time_to_teleport: 300
+  total_timesteps: 500_000
+  model_output_dir: ITSC_2026/models/ppo
+  rl_checkpoint_freq_steps: 50000
+  rl_checkpoint_upload_to_wandb: true
+  rl_wandb_log_every_n_steps: 25
+  rl_save_trajectories: false
+  iz_scenario_duration_seconds: 100000
+  iz_seed: 3423
+  iz_bus_gen_seed: 3423
+  iz_n_scenarios: 1
+  iz_net_rel_paths: [chicago/2412/net.net.xml]
+  iz_random_start_time: true
+  electric_penetration_rate: 0
+  bus_vid_prefix: _42.
+  iz_bus_timetable_config:
+    route_count: 4
+    headway_min_seconds: 300.0
+    headway_max_seconds: 900.0
+    deviation_min_seconds: -120.0
+    deviation_max_seconds: 600.0
+    route_duration_min_seconds: 10800
+    route_duration_max_seconds: 36000

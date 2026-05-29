@@ -1,0 +1,15 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite the associated paper."
+title: "Preference-Conditioned Multi-Objective Reinforcement Learning for Runtime-Tunable Transit Signal Priority"
+authors:
+  - family-names: "Adam"
+    given-names: "Philip-Roman"
+    email: "philip-roman.adam@thi.de"
+    affiliation: "Technische Hochschule Ingolstadt"
+  - family-names: "Schmidtner"
+    given-names: "Stefanie"
+    email: "stefanie.schmidtner@thi.de"
+    affiliation: "Technische Hochschule Ingolstadt"
+repository-code: "https://github.com/urbanAIthi/morl-tsp"
+license: "AGPL-3.0-or-later"
+date-released: "2026-05-29"
